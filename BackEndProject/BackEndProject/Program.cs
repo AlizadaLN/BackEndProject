@@ -1,7 +1,20 @@
+using BackEndProject.DAL;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<AppDbContext>(options => {
+    options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+});
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromSeconds(10);
+});
+
 
 var app = builder.Build();
 
@@ -19,6 +32,11 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.MapControllerRoute(
+           name: "areas",
+           pattern: "{area:exists}/{controller=dashboard}/{action=Index}/{id?}"
+         );
 
 app.MapControllerRoute(
     name: "default",
