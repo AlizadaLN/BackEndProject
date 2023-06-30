@@ -25,3 +25,143 @@
 </section>
 
 
+<!--====== Banner Part Start ======-->
+
+<div class="banner-area banner-bg">
+    <div class="container-fluid custom-container">
+        <div class="row">
+
+            @foreach (var banners in Model.Banners)
+            {
+                <div class="col-md-6">
+                    <div class="banner-image">
+                        <a href="shop-4-column.html"><img src="~/assets/images/@banners.ImageUrl" alt="banner"></a>
+                    </div> <!-- banner image -->
+                </div>
+            }
+            </div>
+        </div> <!-- row -->
+    </div> <!-- container -->
+</div>
+
+<!--====== Banner Part Ends ======-->
+<!--====== Brand Part Start ======-->
+
+<div class="brand-area pt-80">
+    <div class="container-fluid custom-container">
+        <div class="row brand-active">
+            @foreach (var brands in Model.Brands)
+            {
+                <div class="col-lg-2">
+                    <div class="single-brand">
+                        <a href="#">
+                            <img src="assets/images/brand/@brands.ImageUrl" alt="brand">
+                        </a>
+                    </div> <!-- single brand -->
+                </div>
+            }
+            
+            
+        </div> <!-- row -->
+    </div> <!-- container -->
+</div>
+
+<!--====== Brand Part Ends ======-->
+
+<!--====== Features Banner Part Start ======-->
+<section class="features-banner-area pt-80 pb-100">
+    <div class="container-fluid custom-container">
+        <div class="features-banner-wrapper d-flex flex-wrap">
+            @foreach (var fba in Model.FeaturesBannerAreas)
+            {
+                <div class="single-features-banner d-flex">
+                    <div class="banner-icon">
+                        <img src="~/assets/images/banner-icon/@(fba.ImageUrl)" alt="Icon">
+                    </div>
+                    <div class="banner-content media-body">
+                        <h3 class="banner-title">@fba.Title</h3>
+                        <p>@fba.Desc</p>
+                    </div>
+                </div> <!-- single features banner -->
+            }
+        </div> <!-- features banner wrapper -->
+    </div> <!-- container -->
+</section>
+
+<!--====== Features Banner Part Ends ======-->
+<!--====== Blog Part Start ======-->
+
+<section class="blog-area blog-bg pt-100 pb-100">
+    <div class="container">
+        <div class="row blog-active">
+            @foreach (var blog in Model.Blogs)
+            {
+                <div class="col-lg-4">
+                    <div class="single-blog">
+                        <div class="blag-image">
+                            <a href="blog-single-left-sidebar.html"><img src="~/assets/images/@blog.ImageUrl" alt="Blog"></a>
+                            <p class="meta-date">
+                                <span class="day">@blog.CreteDate.ToString("dd")</span>
+                                <span class="month">@blog.CreteDate.ToString("MMM")</span>
+                            </p>
+                        </div>
+                        <div class="blag-content">
+                            <h2 class="blog-title"><a>@blog.Title</a></h2>
+                            <p>@blog.Desc</p>
+                        </div>
+                    </div> <!-- single blog -->
+                </div>
+            }
+           
+           
+            
+        </div> <!-- row -->
+    </div> <!-- container -->
+</section>
+
+<!--====== Blog Part Ends ======-->
+<!--====== Testimonial Part Start ======-->
+
+<section class="testimonial-area bg_cover pt-100 pb-100" style="background-image: url('@Url.Content("~/assets/images/bg_testimonial.jpg")')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10">
+                <div class="testimonial-active">
+                    <div class="single-testimonial d-sm-flex">
+                        <div class="testimonial-author">
+                            <img src="~/assets/images/author-1.png" alt="author">
+                        </div>
+                        <div class="testimonial-content media-body">
+                            <p> An has feugiat vivendum, ad vix tacimates accusamus, cum commune lucilius no. Sit at alia civibus indoctum, ea mel regione percipit adipisci. Per modus nostrum vituperata no, eam ne magna solum constituam.</p>
+                            <h4 class="author-name">John Doe</h4>
+                            <span class="designation">email@yourwebsitename.com</span>
+                        </div>
+                    </div> <!-- single testimonial -->
+                    <div class="single-testimonial d-sm-flex">
+                        <div class="testimonial-author">
+                            <img src="~/assets/images/author-1.png" alt="author">
+                        </div>
+                        <div class="testimonial-content media-body">
+                            <p> An has feugiat vivendum, ad vix tacimates accusamus, cum commune lucilius no. Sit at alia civibus indoctum, ea mel regione percipit adipisci. Per modus nostrum vituperata no, eam ne magna solum constituam.</p>
+                            <h4 class="author-name">John Doe</h4>
+                            <span class="designation">email@yourwebsitename.com</span>
+                        </div>
+                    </div> <!-- single testimonial -->
+                    <div class="single-testimonial d-sm-flex">
+                        <div class="testimonial-author">
+                            <img src="~/assets/images/author-1.png" alt="author">
+                        </div>
+                        <div class="testimonial-content media-body">
+                            <p> An has feugiat vivendum, ad vix tacimates accusamus, cum commune lucilius no. Sit at alia civibus indoctum, ea mel regione percipit adipisci. Per modus nostrum vituperata no, eam ne magna solum constituam.</p>
+                            <h4 class="author-name">John Doe</h4>
+                            <span class="designation">email@yourwebsitename.com</span>
+                        </div>
+                    </div> <!-- single testimonial -->
+                </div> <!-- testimonial Active -->
+            </div>
+        </div> <!-- row -->
+    </div> <!-- container -->
+</section>
+
+<!--====== Testimonial Part Ends ======-->
+

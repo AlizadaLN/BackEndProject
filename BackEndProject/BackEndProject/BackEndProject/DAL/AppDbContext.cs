@@ -10,6 +10,14 @@ namespace BackEndProject.DAL
 
         public DbSet<Slider> Sliders { get; set; }
         public DbSet<SlidersContent> SlidersContent { get; set; }
+        public DbSet<Banner> Banners { get; set; }
+
+        public DbSet<Brand> Brands { get; set; }
+        public DbSet<FeaturesBannerArea> FeaturesBannerAreas { get; set; }
+
+        public DbSet<Blog> Blogs { get; set; }
+
+
 
         //public DbSet<Product> Products { get; set; }
         //public DbSet<Category> Categories { get; set; }
@@ -25,7 +33,7 @@ namespace BackEndProject.DAL
         //            Title = "2020 Virtual Reality Fulldive VR.",
         //            Description = "Explore and immerse in exciting 360 content with Fulldive’s all-in-one virtual reality platform"
         //        },
-             
+
         //        new Slider
         //        {
         //            Id=2,
