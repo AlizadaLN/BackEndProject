@@ -10,7 +10,6 @@
     <Folder Include="Areas\AdminArea\Data\" />
     <Folder Include="Areas\AdminArea\Models\" />
     <Folder Include="DAL\Configurations\" />
-    <Folder Include="Helpers\" />
   </ItemGroup>
 
   <ItemGroup>

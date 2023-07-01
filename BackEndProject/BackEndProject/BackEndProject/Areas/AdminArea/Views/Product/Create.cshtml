@@ -1,0 +1,80 @@
+﻿@model ProductCreateVM
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/AdminArea/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Create Product</h4>
+            <p class="card-description">  </p>
+
+            <form method="post" class="forms-sample" enctype="multipart/form-data">
+                
+
+                <div class="form-group">
+                    <label for="Name"></label>
+                    <input asp-for="Name" class="form-control"  placeholder="Product Name">
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="Price"></label>
+                    <input asp-for="Price" class="form-control"  placeholder="Product Price">
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="Discount"></label>
+                    <input asp-for="Discount" class="form-control"  placeholder="Product Discount">
+                    <span asp-validation-for="Discount" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="Count"></label>
+                    <input asp-for="Count" class="form-control" placeholder="Count">
+                    <span asp-validation-for="Count" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="Rating"></label>
+                    <input asp-for="Rating" class="form-control" placeholder="Rating">
+                    <span asp-validation-for="Rating" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="CreatedDate"></label>
+                    <input asp-for="CreatedDate" class="form-control" placeholder="CreatedDate">
+                    <span asp-validation-for="CreatedDate" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="IsSpecialProduct"></label>
+                    <select class="form-control" placeholder="IsSpecialProduct">
+                        <option selected>IsSpecialProduct</option>
+                        <option value="true">True</option>
+                        <option value="false">False</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="Photos"></label>
+                    <input asp-for="Photos" class="form-control">
+                    <span asp-validation-for="Photos" multiple class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <select asp-for="CategoryId" class="form-select" asp-items="@ViewBag.Categories" aria-label="Default select example">
+                        <option selected>CategoryName</option>
+                        
+
+                    </select>
+
+                </div>
+
+
+
+                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                <a class="btn btn-light" asp-controller="product" asp-action="index">Cancel</a>
+            </form>
+
+        </div>
+    </div>
+</div>
+

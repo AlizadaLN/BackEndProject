@@ -15,9 +15,14 @@ namespace BackEndProject.Models
         public int Count { get; set; }
         [Range(1, 5)]
         public int Rating { get; set; }
-        public List<Image> Images { get; set; }
+        public List<Image> Images { get; set; } = new List<Image>();
+
         public int CategoryId { get; set; }
         public Category Category { get; set; }
+
+        public bool IsSpecialProduct { get; set; }
+        public DateTime CreatedDate { get; set; }
+
 
     }
 }
