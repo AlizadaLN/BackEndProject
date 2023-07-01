@@ -10,7 +10,7 @@ namespace BackEndProject.ViewModels.AdminVM.Category
 
         public bool IsMain { get; set; }
 
-       
+        public Nullable<int> ParentId { get; set; }
 
     }
 }

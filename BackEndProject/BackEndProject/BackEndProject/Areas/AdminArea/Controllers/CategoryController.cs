@@ -32,6 +32,9 @@ namespace BackEndProject.Areas.AdminArea.Controllers
             return View();
         }
 
+
+
+
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public IActionResult Create(CategoryCreateVM category)
@@ -47,25 +50,30 @@ namespace BackEndProject.Areas.AdminArea.Controllers
                 ModelState.AddModelError("Name", "Category with the same name already exists");
                 return View(category);
             }
-
+            Category newCategory = null;
             if (category.IsMain)
             {
 
-                Category newCategory = new Category
+                newCategory = new Category
                 {
                     Name = category.Name,
 
                     IsMain = true
                 };
 
-                _appDbContext.Categories.Add(newCategory);
             }
             else
             {
-
+                newCategory = new Category
+                {
+                    Name = category.Name,
+                    IsMain = false,
+                    ParentId = category.ParentId
+                };
 
             }
 
+            _appDbContext.Categories.Add(newCategory);
             _appDbContext.SaveChanges();
 
             return RedirectToAction(nameof(Index));
@@ -73,69 +81,15 @@ namespace BackEndProject.Areas.AdminArea.Controllers
 
 
 
-        //public IActionResult Update(int id)
-        //{
-        //    var category = _appDbContext.Categories.Include(c => c.Children).FirstOrDefault(c => c.Id == id);
-        //    if (category == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    ViewBag.Categories = _appDbContext.Categories.ToList();
-        //    ViewBag.ParentCategories = _appDbContext.Categories.Where(c => c.IsMain && c.Id != id);
-        //    return View(category);
-        //}
-
-        //[HttpPost]
-        //[AutoValidateAntiforgeryToken]
-        //public IActionResult Update(int id, CategoryUpdateVM model)
-        //{
-        //    var category = _appDbContext.Categories.Include(c => c.Children).FirstOrDefault(c => c.Id == id);
-        //    if (category == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    if (!ModelState.IsValid)
-        //    {
-        //        ViewBag.Categories = _appDbContext.Categories.ToList();
-        //        ViewBag.ParentCategories = _appDbContext.Categories.Where(c => c.IsMain && c.Id != id);
-        //        return View(model);
-        //    }
-
-        //    var exist = _appDbContext.Categories.Any(c => c.Name.ToLower() == model.Name.ToLower() && c.Id != id);
-        //    if (exist)
-        //    {
-        //        ModelState.AddModelError("Name", "Category with the same name already exists");
-        //        ViewBag.Categories = _appDbContext.Categories.ToList();
-        //        ViewBag.ParentCategories = _appDbContext.Categories.Where(c => c.IsMain && c.Id != id);
-        //        return View(model);
-        //    }
-
-        //    category.Name = model.Name;
-        //    category.IsMain = model.IsMain;
-        //    category.ParentId = model.ParentId;
-
-        //    _appDbContext.SaveChanges();
-
-        //    return RedirectToAction(nameof(Index));
-        //}
-
-
-
 
         public IActionResult Update(int id)
         {
             
-            
-               
-
                 ViewBag.Categories = _appDbContext.Categories.ToList();
                 ViewBag.ParentCategories = _appDbContext.Categories.Where(c => c.IsMain && c.Id != id);
 
                 return View();
-            
-
+         
         }
 
         [HttpPost]
@@ -172,6 +126,41 @@ namespace BackEndProject.Areas.AdminArea.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+
+        public IActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var category = _appDbContext.Categories.Include(c => c.Children).FirstOrDefault(c => c.Id == id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            // Check if the category has any products
+            var hasProducts = _appDbContext.Products.Any(p => p.CategoryId == category.Id);
+            if (hasProducts)
+            {
+                ModelState.AddModelError("CategoryId", "Cannot delete the category because it contains products.");
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Check if the category has any children categories
+            if (category.Children.Any())
+            {
+                ModelState.AddModelError("CategoryId", "Cannot delete the category because it has children categories.");
+                return RedirectToAction(nameof(Index));
+            }
+
+            _appDbContext.Categories.Remove(category);
+            _appDbContext.SaveChanges();
+            return RedirectToAction(nameof(Index));
+        }
+
 
 
     }
