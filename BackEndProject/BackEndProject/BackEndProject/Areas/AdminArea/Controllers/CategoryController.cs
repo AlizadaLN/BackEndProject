@@ -4,6 +4,7 @@ using BackEndProject.ViewModels.AdminVM.Category;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace BackEndProject.Areas.AdminArea.Controllers
 {
@@ -22,7 +23,7 @@ namespace BackEndProject.Areas.AdminArea.Controllers
             return View(_appDbContext.Categories.ToList());
         }
 
-        
+
 
         public IActionResult Create()
         {
@@ -49,11 +50,11 @@ namespace BackEndProject.Areas.AdminArea.Controllers
 
             if (category.IsMain)
             {
-                
+
                 Category newCategory = new Category
                 {
                     Name = category.Name,
-                    
+
                     IsMain = true
                 };
 
@@ -61,8 +62,8 @@ namespace BackEndProject.Areas.AdminArea.Controllers
             }
             else
             {
-                
-                
+
+
             }
 
             _appDbContext.SaveChanges();
@@ -72,17 +73,69 @@ namespace BackEndProject.Areas.AdminArea.Controllers
 
 
 
+        //public IActionResult Update(int id)
+        //{
+        //    var category = _appDbContext.Categories.Include(c => c.Children).FirstOrDefault(c => c.Id == id);
+        //    if (category == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    ViewBag.Categories = _appDbContext.Categories.ToList();
+        //    ViewBag.ParentCategories = _appDbContext.Categories.Where(c => c.IsMain && c.Id != id);
+        //    return View(category);
+        //}
+
+        //[HttpPost]
+        //[AutoValidateAntiforgeryToken]
+        //public IActionResult Update(int id, CategoryUpdateVM model)
+        //{
+        //    var category = _appDbContext.Categories.Include(c => c.Children).FirstOrDefault(c => c.Id == id);
+        //    if (category == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    if (!ModelState.IsValid)
+        //    {
+        //        ViewBag.Categories = _appDbContext.Categories.ToList();
+        //        ViewBag.ParentCategories = _appDbContext.Categories.Where(c => c.IsMain && c.Id != id);
+        //        return View(model);
+        //    }
+
+        //    var exist = _appDbContext.Categories.Any(c => c.Name.ToLower() == model.Name.ToLower() && c.Id != id);
+        //    if (exist)
+        //    {
+        //        ModelState.AddModelError("Name", "Category with the same name already exists");
+        //        ViewBag.Categories = _appDbContext.Categories.ToList();
+        //        ViewBag.ParentCategories = _appDbContext.Categories.Where(c => c.IsMain && c.Id != id);
+        //        return View(model);
+        //    }
+
+        //    category.Name = model.Name;
+        //    category.IsMain = model.IsMain;
+        //    category.ParentId = model.ParentId;
+
+        //    _appDbContext.SaveChanges();
+
+        //    return RedirectToAction(nameof(Index));
+        //}
+
+
+
+
         public IActionResult Update(int id)
         {
-            var category = _appDbContext.Categories.Include(c => c.Children).FirstOrDefault(c => c.Id == id);
-            if (category == null)
-            {
-                return NotFound();
-            }
+            
+            
+               
 
-            ViewBag.Categories = _appDbContext.Categories.ToList();
-            ViewBag.ParentCategories = _appDbContext.Categories.Where(c => c.IsMain && c.Id != id);
-            return View(category);
+                ViewBag.Categories = _appDbContext.Categories.ToList();
+                ViewBag.ParentCategories = _appDbContext.Categories.Where(c => c.IsMain && c.Id != id);
+
+                return View();
+            
+
         }
 
         [HttpPost]
@@ -105,7 +158,7 @@ namespace BackEndProject.Areas.AdminArea.Controllers
             var exist = _appDbContext.Categories.Any(c => c.Name.ToLower() == model.Name.ToLower() && c.Id != id);
             if (exist)
             {
-                ModelState.AddModelError("Name", "Category with the same name already exists");
+                ModelState.AddModelError("Name", "A category with the same name already exists");
                 ViewBag.Categories = _appDbContext.Categories.ToList();
                 ViewBag.ParentCategories = _appDbContext.Categories.Where(c => c.IsMain && c.Id != id);
                 return View(model);
@@ -120,5 +173,8 @@ namespace BackEndProject.Areas.AdminArea.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
     }
 }
+
+
