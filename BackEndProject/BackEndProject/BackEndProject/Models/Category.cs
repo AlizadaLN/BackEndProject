@@ -14,6 +14,5 @@ namespace BackEndProject.Models
         public Category Parent { get; set; }
 
         public IEnumerable <Category> Children { get; set; }
-
     }
 }

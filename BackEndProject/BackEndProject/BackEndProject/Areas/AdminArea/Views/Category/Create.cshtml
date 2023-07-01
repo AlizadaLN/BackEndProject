@@ -1,0 +1,47 @@
+﻿@model Category
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/AdminArea/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Create Category</h4>
+            <p class="card-description">  </p>
+           
+            <form class="forms-sample" method="post" >
+                @Html.AntiForgeryToken()
+
+                <div class="form-group">
+                    <label for="Name">Category Name</label>
+                    <input type="text" class="form-control" id="Name" name="Name" placeholder="Category Name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="IsMain">IsMain</label>
+                    <select class="form-control" id="IsMain" name="IsMain">
+                        <option value="true">True</option>
+                        <option value="false">False</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="ParentId">Category Parent</label>
+                    <select class="form-control" id="ParentId" name="ParentId">
+                        <option value=""> </option>
+                        @foreach (var category in ViewBag.ParentCategories)
+                        {
+                            <option value="@category.Id">@category.Name</option>
+                        }
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                <a href="@Url.Action("Index", "Category")" class="btn btn-dark">Cancel</a>
+            </form>
+
+        </div>
+    </div>
+</div>
+
