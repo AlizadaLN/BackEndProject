@@ -84,11 +84,19 @@ namespace BackEndProject.Areas.AdminArea.Controllers
 
         public IActionResult Update(int id)
         {
-            
+            var Category = _appDbContext.Categories.FirstOrDefault(x => x.Id == id);
+            if (Category == null)
+                return NotFound();
                 ViewBag.Categories = _appDbContext.Categories.ToList();
                 ViewBag.ParentCategories = _appDbContext.Categories.Where(c => c.IsMain && c.Id != id);
 
-                return View();
+            CategoryUpdateVM categoryUpdateVM = new()
+            {
+                Name = Category.Name,
+                IsMain = Category.IsMain,
+                ParentId = Category.ParentId
+            };
+                return View(categoryUpdateVM);
          
         }
 
@@ -96,6 +104,24 @@ namespace BackEndProject.Areas.AdminArea.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult Update(int id, CategoryUpdateVM model)
         {
+            var oldCategory=_appDbContext.Categories.FirstOrDefault(x => x.Id == id);
+            if (oldCategory is null)
+                return NotFound();
+
+            ViewBag.Categories = _appDbContext.Categories.ToList();
+            ViewBag.ParentCategories = _appDbContext.Categories.Where(c => c.IsMain && c.Id != id);
+
+
+            if (oldCategory.IsMain == false && model.IsMain==true)
+            {
+                ModelState.AddModelError("IsMain", "This is child category");
+                return View(model);
+            }
+            if (oldCategory.IsMain == true && model.IsMain == false)
+            {
+                ModelState.AddModelError("IsMain", "This is parent category");
+                return View(model);
+            }
             var category = _appDbContext.Categories.Include(c => c.Children).FirstOrDefault(c => c.Id == id);
             if (category == null)
             {
@@ -128,12 +154,9 @@ namespace BackEndProject.Areas.AdminArea.Controllers
         }
 
 
-        public IActionResult Delete(int? id)
+        public IActionResult Delete(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+      
 
             var category = _appDbContext.Categories.Include(c => c.Children).FirstOrDefault(c => c.Id == id);
             if (category == null)

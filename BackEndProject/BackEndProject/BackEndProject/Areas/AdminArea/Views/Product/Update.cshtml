@@ -1,8 +1,10 @@
 ﻿@model ProductCreateVM
+
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Update";
     Layout = "~/Areas/AdminArea/Views/Shared/_AdminLayout.cshtml";
 }
+
 
 <div class="col-12 grid-margin stretch-card">
     <div class="card">
@@ -11,24 +13,24 @@
             <p class="card-description">  </p>
 
             <form method="post" class="forms-sample" enctype="multipart/form-data">
-                
+
 
                 <div class="form-group">
                     <label for="Name"></label>
-                    <input asp-for="Name" class="form-control"  placeholder="Product Name">
+                    <input asp-for="Name" class="form-control" placeholder="Product Name">
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label for="Price"></label>
-                    <input asp-for="Price" class="form-control"  placeholder="Product Price">
+                    <input asp-for="Price" class="form-control" placeholder="Product Price">
                     <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label for="Discount"></label>
-                    <input asp-for="Discount" class="form-control"  placeholder="Product Discount">
+                    <input asp-for="Discount" class="form-control" placeholder="Product Discount">
                     <span asp-validation-for="Discount" class="text-danger"></span>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="Count"></label>
                     <input asp-for="Count" class="form-control" placeholder="Count">
@@ -62,7 +64,7 @@
                 <div class="form-group">
                     <select asp-for="CategoryId" class="form-select" asp-items="@ViewBag.Categories" aria-label="Default select example">
                         <option selected>CategoryName</option>
-                        
+
 
                     </select>
                     <span asp-validation-for="CategoryId" class="text-danger"></span>

@@ -76,21 +76,11 @@ namespace BackEndProject.Areas.AdminArea.Controllers
                 foreach (var photo in productCreateVM.Photos)
                 {
                     image.ImageUrl = photo.SaveImage(_webHostEnvironment, "images");
-                image.ProductId = productCreateVM.Id;
-               product.Images.Add(image);
+                     image.ProductId = productCreateVM.Id;
+                    product.Images.Add(image);
                 }
 
-                //string path= _webHostEnvironment.ContentRootPath + @"wwwroot\assets\images\"+"EHEHHEHEH1231321" + productCreateVM.Photos[0].FileName;
-                //image.ImageUrl = "EHEHHEHEH1231321" + productCreateVM.Photos[0].FileName;
-                //using (FileStream stream = new FileStream(path, FileMode.Create))
-                //{
-                //    productCreateVM.Photos[0].CopyTo(stream);
-                //};
-
-                
-
-                //_appDbContext.Image.Add(image);
-                //_appDbContext.SaveChanges();
+     
 
             }
 
@@ -99,16 +89,107 @@ namespace BackEndProject.Areas.AdminArea.Controllers
             product.Price = productCreateVM.Price;
             product.Discount= productCreateVM.Discount;
             product.Rating = productCreateVM.Rating;
+            var category=_appDbContext.Categories.FirstOrDefault(x=>x.Id==productCreateVM.CategoryId);
+            if (category is null)
+            {
+                ModelState.AddModelError("CategoryId", "Category is not found");
+                return View();
+            }
             product.CategoryId = productCreateVM.CategoryId;
             product.Count = productCreateVM.Count;
             _appDbContext.Products.Add(product);
+            category.Products.Add(product);
             _appDbContext.SaveChanges();
             return RedirectToAction("index");
 
         }
-    }
-
     
+    public async Task<IActionResult> Update(int id)
+    {
+            var Product = await _appDbContext.Products.FirstOrDefaultAsync(x => x.Id == id);
+            if (Product is null)
+                return NotFound();
+            ViewBag.Categories = _appDbContext.Categories.ToList();
+            ViewBag.Categories = new SelectList(_appDbContext.Categories.ToList(), "Id", "Name");
+
+            ProductCreateVM productCreateVM = new()
+            {
+                Name= Product.Name,
+                Price= Product.Price,
+                Discount= Product.Discount,
+                Rating= Product.Rating,
+                CategoryId= Product.CategoryId,
+                Count= Product.Count,
+                IsSpecialProduct=Product.IsSpecialProduct
+
+
+            };
+
+            return View(productCreateVM);
+
+
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(int id,ProductCreateVM productCreateVM)
+        {
+            var Product= await _appDbContext.Products.Include(x=>x.Images).Include(y=>y.Category).FirstOrDefaultAsync(x => x.Id == id);
+            if (Product is null)
+                return NotFound();
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Categories = _appDbContext.Categories.ToList();
+                ViewBag.Categories = new SelectList(_appDbContext.Categories.ToList(), "Id", "Name");
+                return View(productCreateVM);
+            }
+            string path = _webHostEnvironment.ContentRootPath + "wwwroot\\assets\\images\\";
+            if(productCreateVM.Photos is not null)
+            {
+                foreach (var Image in Product.Images)
+                {
+                    Image.DeleteImage(path + Image.ImageUrl);
+                    _appDbContext.Image.Remove(Image);
+                    
+                }
+                Image image=new();
+                foreach (var photo in productCreateVM.Photos)
+                {
+                    image.ImageUrl = photo.SaveImage(_webHostEnvironment, "images");
+                    image.ProductId = productCreateVM.Id;
+                    Product.Images.Add(image);
+                }
+
+
+            }
+
+            var Category = await _appDbContext.Categories.Include(x=>x.Products).FirstOrDefaultAsync(x => x.Id == Product.CategoryId);
+            Category.Products.Remove(Product);
+
+            var ViewModelCategory = _appDbContext.Categories.FirstOrDefault(x => x.Id == productCreateVM.CategoryId);
+            if (ViewModelCategory is null)
+            {
+                ModelState.AddModelError("CategoryId", "Category is not found");
+                return View();
+            }
+
+
+            Product.Name = productCreateVM.Name;
+            Product.Price=productCreateVM.Price;
+            Product.Discount=productCreateVM.Discount;
+            Product.CreatedDate=productCreateVM.CreatedDate;
+            Product.Count=productCreateVM.Count;
+            Product.IsSpecialProduct=productCreateVM.IsSpecialProduct;
+            Product.Rating=productCreateVM.Rating;
+            Product.CategoryId=productCreateVM.CategoryId;
+            
+            
+            await _appDbContext.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+    }
 
 
 }

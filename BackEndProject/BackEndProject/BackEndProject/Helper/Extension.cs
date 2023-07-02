@@ -1,4 +1,5 @@
-﻿using BackEndProject.ViewModels.AdminVM;
+﻿using BackEndProject.Models;
+using BackEndProject.ViewModels.AdminVM;
 using BackEndProject.ViewModels.AdminVM.Product;
 using Microsoft.AspNetCore.Hosting;
 
@@ -39,6 +40,14 @@ namespace BackEndProject.Helper
             //{
             //    productCreateVM.Photos[0].CopyTo(stream);
             //};
+        }
+        public static void DeleteImage(this Image image,string path)
+        {
+            if (System.IO.File.Exists(path))
+            {
+                System.IO.File.Delete(path);
+            }
+
         }
     }
 }

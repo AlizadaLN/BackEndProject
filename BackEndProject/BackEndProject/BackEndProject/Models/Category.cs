@@ -14,5 +14,6 @@ namespace BackEndProject.Models
         public Category Parent { get; set; }
 
         public ICollection<Category> Children { get; set; }
+        public ICollection<Product> Products { get; set; }
     }
 }

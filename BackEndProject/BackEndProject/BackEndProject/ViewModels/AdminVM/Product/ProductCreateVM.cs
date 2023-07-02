@@ -9,7 +9,7 @@ namespace BackEndProject.ViewModels.AdminVM.Product
         [Required, StringLength(100)]
         public string Name { get; set; }
         public decimal Price { get; set; }
-        public decimal Discount { get; set; }
+        public decimal? Discount { get; set; }
         public int Rating { get; set; }
         public int Count { get; set; }
         public DateTime CreatedDate { get; set; }
