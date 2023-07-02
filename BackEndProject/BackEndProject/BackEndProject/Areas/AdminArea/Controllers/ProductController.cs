@@ -25,6 +25,7 @@ namespace BackEndProject.Areas.AdminArea.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.webHostEnvironment = _webHostEnvironment.ContentRootPath + @"wwwroot\assets\images\";
             var products = _appDbContext.Products
                 .Include(p => p.Images)
                 .Include(p => p.Category)
@@ -44,6 +45,8 @@ namespace BackEndProject.Areas.AdminArea.Controllers
 
         public IActionResult Create(ProductCreateVM productCreateVM)
         {
+            ViewBag.Categories = _appDbContext.Categories.ToList();
+            ViewBag.Categories = new SelectList(_appDbContext.Categories.ToList(), "Id", "Name");
             if (!ModelState.IsValid)
                 return View();
 
@@ -70,10 +73,25 @@ namespace BackEndProject.Areas.AdminArea.Controllers
                     image.IsMain = true;
                 }
 
+                foreach (var photo in productCreateVM.Photos)
+                {
+                    image.ImageUrl = photo.SaveImage(_webHostEnvironment, "images");
+                image.ProductId = productCreateVM.Id;
+               product.Images.Add(image);
+                }
 
+                //string path= _webHostEnvironment.ContentRootPath + @"wwwroot\assets\images\"+"EHEHHEHEH1231321" + productCreateVM.Photos[0].FileName;
+                //image.ImageUrl = "EHEHHEHEH1231321" + productCreateVM.Photos[0].FileName;
+                //using (FileStream stream = new FileStream(path, FileMode.Create))
+                //{
+                //    productCreateVM.Photos[0].CopyTo(stream);
+                //};
 
-                image.ImageUrl = item.SaveImage(_webHostEnvironment, "images");
-                product.Images.Add(image);
+                
+
+                //_appDbContext.Image.Add(image);
+                //_appDbContext.SaveChanges();
+
             }
 
 

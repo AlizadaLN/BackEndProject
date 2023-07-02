@@ -36,7 +36,7 @@ namespace BackEndProject.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Banners");
+                    b.ToTable("Banners", (string)null);
                 });
 
             modelBuilder.Entity("BackEndProject.Models.Blog", b =>
@@ -64,7 +64,7 @@ namespace BackEndProject.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Blogs");
+                    b.ToTable("Blogs", (string)null);
                 });
 
             modelBuilder.Entity("BackEndProject.Models.Brand", b =>
@@ -81,7 +81,7 @@ namespace BackEndProject.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Brands");
+                    b.ToTable("Brands", (string)null);
                 });
 
             modelBuilder.Entity("BackEndProject.Models.Category", b =>
@@ -107,7 +107,7 @@ namespace BackEndProject.Migrations
 
                     b.HasIndex("ParentId");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("BackEndProject.Models.FeaturesBannerArea", b =>
@@ -132,7 +132,7 @@ namespace BackEndProject.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FeaturesBannerAreas");
+                    b.ToTable("FeaturesBannerAreas", (string)null);
                 });
 
             modelBuilder.Entity("BackEndProject.Models.Image", b =>
@@ -157,7 +157,7 @@ namespace BackEndProject.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Image");
+                    b.ToTable("Image", (string)null);
                 });
 
             modelBuilder.Entity("BackEndProject.Models.Product", b =>
@@ -196,7 +196,7 @@ namespace BackEndProject.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("BackEndProject.Models.Slider", b =>
@@ -213,7 +213,7 @@ namespace BackEndProject.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sliders");
+                    b.ToTable("Sliders", (string)null);
                 });
 
             modelBuilder.Entity("BackEndProject.Models.SlidersContent", b =>
@@ -239,7 +239,7 @@ namespace BackEndProject.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SlidersContent");
+                    b.ToTable("SlidersContent", (string)null);
                 });
 
             modelBuilder.Entity("BackEndProject.Models.Category", b =>

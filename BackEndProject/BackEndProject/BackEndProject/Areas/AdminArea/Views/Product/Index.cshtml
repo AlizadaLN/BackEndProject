@@ -39,8 +39,10 @@
                                     <td>@products.Count</td>
                                     <td>@products.Rating</td>
                                     <td>@products.CreatedDate</td>
-
-                                    <td>@products.Images</td>
+                                    <td>@products.IsSpecialProduct</td>
+                                    <td>
+                                        <img src="~/assets/images/@products.Images[0].ImageUrl" alt="">
+                                        </td>
                                     <td>@products.CategoryId</td>
                                     <td>
 
