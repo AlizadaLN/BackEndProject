@@ -23,6 +23,9 @@ namespace BackEndProject.Models
         public bool IsSpecialProduct { get; set; }
         public DateTime CreatedDate { get; set; }
 
+        public int CountOfSoldProd { get; set; }
+        public bool IsDeleted { get; set; }
+
 
     }
 }

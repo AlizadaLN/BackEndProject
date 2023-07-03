@@ -21,7 +21,7 @@ namespace BackEndProject.Controllers
         {
             HomeVM homeVM = new HomeVM();
             homeVM.Sliders = _appDbContext.Sliders.ToList();
-            homeVM.SlidersContent = _appDbContext.SlidersContent.FirstOrDefault();
+         //   homeVM.SlidersContent = _appDbContext.SlidersContent.FirstOrDefault();
             homeVM.Banners = _appDbContext.Banners.ToList();
             homeVM.Brands = _appDbContext.Brands.ToList();
             homeVM.FeaturesBannerAreas = _appDbContext.FeaturesBannerAreas.ToList();

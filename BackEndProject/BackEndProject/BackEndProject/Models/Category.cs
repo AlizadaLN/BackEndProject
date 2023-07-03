@@ -15,5 +15,9 @@ namespace BackEndProject.Models
 
         public ICollection<Category> Children { get; set; }
         public ICollection<Product> Products { get; set; }
+
+        public string ImageUrl { get; set; }
+
+        public int CountOfSoldProd { get; set; }
     }
 }

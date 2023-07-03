@@ -32,6 +32,9 @@
                                     <td>@item.ParentId</td>
                                     <td>@item.IsMain</td>
                                     <td>
+                                        <img width="100" height="100" src="~/assets/imgCat/@item.ImageUrl" />
+                                    </td>
+                                    <td>
                                        
                                         <a class="btn btn-primary" asp-controller="Category" asp-action="update" asp-route-id="@item.Id">
                                             <i class="mdi mdi-tooltip-edit"></i>

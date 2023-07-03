@@ -23,7 +23,7 @@ namespace BackEndProject.Helper
         {
             string fileName = Guid.NewGuid() + file.FileName;
             string path = Path.Combine(webHostEnvironment.WebRootPath,"assets", folder, fileName);
-            // string path=_webHostEnvironment.WebRootPath + @"\img\" + sliderCreateVM.Photo.FileName;
+           
             
 
             using (FileStream stream = new FileStream(path, FileMode.Create))
@@ -32,14 +32,7 @@ namespace BackEndProject.Helper
             };
 
             return fileName;
-            //
-            //string path = _webHostEnvironment.ContentRootPath + @"wwwroot\assets\images\" + "EHEHHEHEH1231321" + productCreateVM.Photos[0].FileName;
-            //image.ImageUrl = "EHEHHEHEH1231321" + productCreateVM.Photos[0].FileName;
-            //image.ProductId = productCreateVM.Id;
-            //using (FileStream stream = new FileStream(path, FileMode.Create))
-            //{
-            //    productCreateVM.Photos[0].CopyTo(stream);
-            //};
+           
         }
         public static void DeleteImage(this Image image,string path)
         {

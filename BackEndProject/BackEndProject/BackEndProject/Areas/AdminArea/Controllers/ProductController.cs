@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using BackEndProject.ViewModels.AdminVM.Category;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BackEndProject.Areas.AdminArea.Controllers
 {
@@ -25,10 +27,10 @@ namespace BackEndProject.Areas.AdminArea.Controllers
 
         public IActionResult Index()
         {
-            ViewBag.webHostEnvironment = _webHostEnvironment.ContentRootPath + @"wwwroot\assets\images\";
+            ViewBag.webHostEnvironment = _webHostEnvironment.ContentRootPath + @"wwwroot\assets\imgProd\";
             var products = _appDbContext.Products
                 .Include(p => p.Images)
-                .Include(p => p.Category)
+                .Include(p => p.Category).Where(x=>!x.IsDeleted)
                 .ToList();
             return View(products);
         }
@@ -56,13 +58,13 @@ namespace BackEndProject.Areas.AdminArea.Controllers
             {
                 if (!item.CheckFileType())
                 {
-                    ModelState.AddModelError("Photos", "Duzgun sech");
+                    ModelState.AddModelError("Photos", "Incorrect photo");
                     return View();
                 }
 
                 if (!item.CheckFileSize(1000))
                 {
-                    ModelState.AddModelError("Photos", "Olcu boyukdur");
+                    ModelState.AddModelError("Photos", "Large Size");
                     return View();
                 }
 
@@ -75,12 +77,13 @@ namespace BackEndProject.Areas.AdminArea.Controllers
 
                 foreach (var photo in productCreateVM.Photos)
                 {
-                    image.ImageUrl = photo.SaveImage(_webHostEnvironment, "images");
-                     image.ProductId = productCreateVM.Id;
+                    image.ImageUrl = photo.SaveImage(_webHostEnvironment, "imgProd");
+                    image.ProductId = productCreateVM.Id;
                     product.Images.Add(image);
                 }
 
-     
+               
+
 
             }
 
@@ -144,7 +147,7 @@ namespace BackEndProject.Areas.AdminArea.Controllers
                 ViewBag.Categories = new SelectList(_appDbContext.Categories.ToList(), "Id", "Name");
                 return View(productCreateVM);
             }
-            string path = _webHostEnvironment.ContentRootPath + "wwwroot\\assets\\images\\";
+            string path = _webHostEnvironment.ContentRootPath + "wwwroot\\assets\\imgProd\\";
             if(productCreateVM.Photos is not null)
             {
                 foreach (var Image in Product.Images)
@@ -156,7 +159,7 @@ namespace BackEndProject.Areas.AdminArea.Controllers
                 Image image=new();
                 foreach (var photo in productCreateVM.Photos)
                 {
-                    image.ImageUrl = photo.SaveImage(_webHostEnvironment, "images");
+                    image.ImageUrl = photo.SaveImage(_webHostEnvironment, "imgProd");
                     image.ProductId = productCreateVM.Id;
                     Product.Images.Add(image);
                 }
@@ -189,7 +192,21 @@ namespace BackEndProject.Areas.AdminArea.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+
+        
+        public IActionResult Delete(int? id)
+        {
+            if (id == null) return NotFound();
+            var product = _appDbContext.Products.FirstOrDefault(c => c.Id == id);
+            if (id == null) return NotFound();
+            product.IsDeleted = true;
+           
+            _appDbContext.SaveChanges();
+            return RedirectToAction(nameof(Index));
+        }
     }
 
+   
 
 }

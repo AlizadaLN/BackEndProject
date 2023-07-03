@@ -36,7 +36,7 @@ namespace BackEndProject.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Banners", (string)null);
+                    b.ToTable("Banners");
                 });
 
             modelBuilder.Entity("BackEndProject.Models.Blog", b =>
@@ -64,7 +64,7 @@ namespace BackEndProject.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Blogs", (string)null);
+                    b.ToTable("Blogs");
                 });
 
             modelBuilder.Entity("BackEndProject.Models.Brand", b =>
@@ -81,7 +81,7 @@ namespace BackEndProject.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Brands", (string)null);
+                    b.ToTable("Brands");
                 });
 
             modelBuilder.Entity("BackEndProject.Models.Category", b =>
@@ -91,6 +91,13 @@ namespace BackEndProject.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CountOfSoldProd")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsMain")
                         .HasColumnType("bit");
@@ -107,7 +114,7 @@ namespace BackEndProject.Migrations
 
                     b.HasIndex("ParentId");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("BackEndProject.Models.FeaturesBannerArea", b =>
@@ -132,7 +139,7 @@ namespace BackEndProject.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FeaturesBannerAreas", (string)null);
+                    b.ToTable("FeaturesBannerAreas");
                 });
 
             modelBuilder.Entity("BackEndProject.Models.Image", b =>
@@ -157,7 +164,7 @@ namespace BackEndProject.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Image", (string)null);
+                    b.ToTable("Image");
                 });
 
             modelBuilder.Entity("BackEndProject.Models.Product", b =>
@@ -174,11 +181,17 @@ namespace BackEndProject.Migrations
                     b.Property<int>("Count")
                         .HasColumnType("int");
 
+                    b.Property<int>("CountOfSoldProd")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<decimal?>("Discount")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsSpecialProduct")
                         .HasColumnType("bit");
@@ -186,7 +199,7 @@ namespace BackEndProject.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal?>("Price")
+                    b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Rating")
@@ -196,27 +209,10 @@ namespace BackEndProject.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("BackEndProject.Models.Slider", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Sliders", (string)null);
-                });
-
-            modelBuilder.Entity("BackEndProject.Models.SlidersContent", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -239,7 +235,7 @@ namespace BackEndProject.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SlidersContent", (string)null);
+                    b.ToTable("Sliders");
                 });
 
             modelBuilder.Entity("BackEndProject.Models.Category", b =>
@@ -253,17 +249,19 @@ namespace BackEndProject.Migrations
 
             modelBuilder.Entity("BackEndProject.Models.Image", b =>
                 {
-                    b.HasOne("BackEndProject.Models.Product", null)
+                    b.HasOne("BackEndProject.Models.Product", "Product")
                         .WithMany("Images")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("BackEndProject.Models.Product", b =>
                 {
                     b.HasOne("BackEndProject.Models.Category", "Category")
-                        .WithMany()
+                        .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -274,6 +272,8 @@ namespace BackEndProject.Migrations
             modelBuilder.Entity("BackEndProject.Models.Category", b =>
                 {
                     b.Navigation("Children");
+
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("BackEndProject.Models.Product", b =>

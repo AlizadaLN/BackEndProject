@@ -10,7 +10,7 @@
             <h4 class="card-title">Create Category</h4>
             <p class="card-description">  </p>
            
-            <form class="forms-sample" method="post" >
+            <form class="forms-sample" method="post" enctype="multipart/form-data">
                 
 
                 <div class="form-group">
@@ -24,6 +24,11 @@
                         <option value="true">True</option>
                         <option value="false">False</option>
                     </select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Photo"></label>
+                    <input asp-for="Photo" class="form-control" placeholder="photo" multiple>
+                    <span asp-validation-for="Photo" class="text-danger"></span>
                 </div>
 
                 <div class="form-group">

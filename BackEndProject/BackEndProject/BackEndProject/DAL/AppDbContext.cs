@@ -9,7 +9,7 @@ namespace BackEndProject.DAL
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<Slider> Sliders { get; set; }
-        public DbSet<SlidersContent> SlidersContent { get; set; }
+      
         public DbSet<Banner> Banners { get; set; }
 
         public DbSet<Brand> Brands { get; set; }
