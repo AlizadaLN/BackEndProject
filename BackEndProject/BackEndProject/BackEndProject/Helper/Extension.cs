@@ -9,14 +9,14 @@ namespace BackEndProject.Helper
     public static class Extension
     {
  
-        public static bool CheckFileType(this IFormFile file)
+        public static bool CheckFileType(this IFormFile file,string type)
         {
-            return file.ContentType.Contains("image");
+            return file.ContentType.Contains(type);
         }
 
         public static bool CheckFileSize(this IFormFile file, int size)
         {
-            return file.Length > size;
+            return file.Length < size;
         }
 
         public static string SaveImage(this IFormFile file, IWebHostEnvironment webHostEnvironment, string folder)

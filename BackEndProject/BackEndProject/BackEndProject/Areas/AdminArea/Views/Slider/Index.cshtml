@@ -29,27 +29,26 @@
                             @foreach (var item in Model)
                             {
                                 <tr>
-                                    @*<td>@item.Title</td>*@
-                                 @*   <td>@item.Subtitle</td>
-                                    <td>@item.Desc</td>*@
+                                    <td>@item.Title</td>
+                                    <td>@item.SubTitle</td>
+                                    <td>@item.Description.Substring(0,10)</td>
                                         
                                     
                                     <td>
-                                        <img width="100" height="100" src="~/imgSld/@item.ImageUrl" />
+                                        <img width="100" height="100" src="~/assets/images/@item.ImageUrl" />
                                     </td>
 
                                     <td>
                                         <a class="btn btn-primary" asp-controller="slider" asp-action="update" asp-route-id="@item.Id">
                                             <i class="mdi mdi-tooltip-edit"></i>
                                         </a>
-
-                                        <a class="btn btn-danger" asp-controller="slider" asp-action="delete" asp-route-id="@item.Id">
-                                            <i class="mdi mdi-delete"></i>
-                                        </a>
-
-                                        <a class="btn btn-success" asp-controller="slider" asp-action="Detail" asp-route-id="@item.Id">
-                                            <i class="mdi mdi-account-card-details"></i>
-                                        </a>
+                                            <form asp-action="delete" asp-route-id="@item.Id">
+                                            <input type="hidden" asp-for="@item.Id" value="@item.Id"/>
+                                            <button class="btn btn-danger" type="submit">
+                                                <i class="mdi mdi-delete"></i>
+                                            </button>
+                                        </form>
+                                       
                                     </td>
                                 </tr>
                             }

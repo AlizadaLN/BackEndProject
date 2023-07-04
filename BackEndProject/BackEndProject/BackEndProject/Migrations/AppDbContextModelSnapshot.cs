@@ -150,6 +150,9 @@ namespace BackEndProject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -157,12 +160,19 @@ namespace BackEndProject.Migrations
                     b.Property<bool>("IsMain")
                         .HasColumnType("bit");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SliderId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("SliderId");
 
                     b.ToTable("Image");
                 });
@@ -249,13 +259,23 @@ namespace BackEndProject.Migrations
 
             modelBuilder.Entity("BackEndProject.Models.Image", b =>
                 {
+                    b.HasOne("BackEndProject.Models.Category", "category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId");
+
                     b.HasOne("BackEndProject.Models.Product", "Product")
                         .WithMany("Images")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProductId");
+
+                    b.HasOne("BackEndProject.Models.Slider", "slider")
+                        .WithMany()
+                        .HasForeignKey("SliderId");
 
                     b.Navigation("Product");
+
+                    b.Navigation("category");
+
+                    b.Navigation("slider");
                 });
 
             modelBuilder.Entity("BackEndProject.Models.Product", b =>

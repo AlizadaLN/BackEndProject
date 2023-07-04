@@ -2,6 +2,7 @@
 using BackEndProject.Helper;
 using BackEndProject.Models;
 using BackEndProject.ViewModels.AdminVM.Category;
+using BackEndProject.ViewModels.AdminVM.Slider;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +25,11 @@ namespace BackEndProject.Areas.AdminArea.Controllers
 
         public IActionResult Index()
         {
-            return View(_appDbContext.Categories.ToList());
+            // return View(_appDbContext.Categories.ToList());
+
+            var categories = _appDbContext.Categories
+               .ToList();
+            return View(categories);
         }
 
 
@@ -36,82 +41,6 @@ namespace BackEndProject.Areas.AdminArea.Controllers
             return View();
         }
 
-
-
-
-        //[HttpPost]
-        //[AutoValidateAntiforgeryToken]
-        //public IActionResult Create(CategoryCreateVM categoryCreateVM)
-        //{
-        //    ViewBag.Categories = _appDbContext.Categories.ToList();
-        //    ViewBag.ParentCategories = _appDbContext.Categories.Where(c => c.IsMain == true);
-
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View(categoryCreateVM);
-        //    }
-
-        //    var exist = _appDbContext.Categories.Any(c => c.Name.ToLower() == categoryCreateVM.Name.ToLower());
-        //    if (exist)
-        //    {
-        //        ModelState.AddModelError("Name", "Category with the same name already exists");
-        //        return View(categoryCreateVM);
-        //    }
-        //    Category newCategory = null;
-        //    if (categoryCreateVM.IsMain)
-        //    {
-
-        //        newCategory = new Category
-        //        {
-        //            Name = categoryCreateVM.Name,
-
-        //            IsMain = true
-        //        };
-
-        //    }
-        //    else
-        //    {
-        //        newCategory = new Category
-        //        {
-        //            Name = categoryCreateVM.Name,
-        //            IsMain = false,
-        //            ParentId = categoryCreateVM.ParentId
-        //        };
-
-        //    }
-
-
-
-        //    if (categoryCreateVM.Photo == null)
-        //    {
-        //        ModelState.AddModelError("Photo", "Bosh qoyma");
-        //        return View();
-        //    }
-
-        //    if (!categoryCreateVM.Photo.CheckFileType())
-        //    {
-        //        ModelState.AddModelError("Photo", "Duzgun sech");
-        //        return View();
-        //    }
-
-        //    if (categoryCreateVM.Photo.CheckFileSize(1000))
-        //    {
-        //        ModelState.AddModelError("Photo", "Olcu 1000 boyukdur");
-        //        return View();
-        //    }
-
-
-        //    Category category=new();
-        //    category.ImageUrl = categoryCreateVM.Photo.SaveImage(_webHostEnvironment, "imgCat");
-
-
-
-
-        //    _appDbContext.Categories.Add(newCategory);
-        //    _appDbContext.SaveChanges();
-
-        //    return RedirectToAction(nameof(Index));
-        //}
 
 
         [HttpPost]
@@ -134,11 +63,31 @@ namespace BackEndProject.Areas.AdminArea.Controllers
                 return View(categoryCreateVM);
             }
 
+           
+
+            if (categoryCreateVM.Photo == null)
+            {
+                ModelState.AddModelError("Photo", "Please select a photo");
+                return View(categoryCreateVM);
+            }
+
+            if (categoryCreateVM.Photo.CheckFileType("jpg")|| categoryCreateVM.Photo.CheckFileType("png"))
+            {
+                ModelState.AddModelError("Photo", "Invalid file type. Please select an image file.");
+                return View(categoryCreateVM);
+            }
+
+            if (categoryCreateVM.Photo.CheckFileSize(1000))
+            {
+                ModelState.AddModelError("Photo", "File size exceeds the limit. Please select a smaller image.");
+                return View(categoryCreateVM);
+            }
+
             Category newCategory = new Category
             {
                 Name = categoryCreateVM.Name,
                 IsMain = categoryCreateVM.IsMain,
-               
+
             };
 
             if (!newCategory.IsMain)
@@ -152,27 +101,16 @@ namespace BackEndProject.Areas.AdminArea.Controllers
                 newCategory.ParentId = categoryCreateVM.ParentId;
             }
 
-            if (categoryCreateVM.Photo == null)
-            {
-                ModelState.AddModelError("Photo", "Please select a photo");
-                return View(categoryCreateVM);
-            }
-
-            if (!categoryCreateVM.Photo.CheckFileType())
-            {
-                ModelState.AddModelError("Photo", "Invalid file type. Please select an image file.");
-                return View(categoryCreateVM);
-            }
-
-            if (!categoryCreateVM.Photo.CheckFileSize(1000))
-            {
-                ModelState.AddModelError("Photo", "File size exceeds the limit. Please select a smaller image.");
-                return View(categoryCreateVM);
-            }
-
-            string uniqueFileName = categoryCreateVM.Photo.SaveImage(_webHostEnvironment, "imgCat");
+            string uniqueFileName = categoryCreateVM.Photo.SaveImage(_webHostEnvironment, "images");
 
             newCategory.ImageUrl = uniqueFileName;
+
+            Image image = new Image
+            {
+                ImageUrl = categoryCreateVM.Photo.SaveImage(_webHostEnvironment, "images"),
+                SliderId = newCategory.Id
+            };
+
 
             _appDbContext.Categories.Add(newCategory);
             _appDbContext.SaveChanges();
@@ -257,35 +195,48 @@ namespace BackEndProject.Areas.AdminArea.Controllers
 
         public IActionResult Delete(int id)
         {
-      
 
-            var category = _appDbContext.Categories.Include(c => c.Children).FirstOrDefault(c => c.Id == id);
-            if (category == null)
+            if (id == null) return NotFound();
+            var category = _appDbContext.Categories.FirstOrDefault(c => c.Id == id);
+            if (id == null)
             {
                 return NotFound();
             }
 
-            
-            var hasProducts = _appDbContext.Products.Any(p => p.CategoryId == category.Id);
-            if (hasProducts)
-            {
-                ModelState.AddModelError("CategoryId", "Cannot delete the category because it contains products.");
-                return RedirectToAction(nameof(Index));
-            }
+            string path = Path.Combine(_webHostEnvironment.WebRootPath, "images", category.ImageUrl);
+            HelperServices.DeleteFile(path);
 
-           
-            if (category.Children.Any())
-            {
-                ModelState.AddModelError("CategoryId", "Cannot delete the category because it has children categories.");
-                return RedirectToAction(nameof(Index));
-            }
+
+            //var hasProducts = _appDbContext.Products.Any(p => p.CategoryId == category.Id);
+            //if (hasProducts)
+            //{
+            //    ModelState.AddModelError("CategoryId", "Cannot delete the category because it contains products.");
+            //    return RedirectToAction(nameof(Index));
+            //}
+
+
+            //if (category.Children.Any())
+            //{
+            //    ModelState.AddModelError("CategoryId", "Cannot delete the category because it has children categories.");
+            //    return RedirectToAction(nameof(Index));
+            //}
 
             _appDbContext.Categories.Remove(category);
             _appDbContext.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
 
+       //if (id == null) return NotFound();
+       // var slider = _appDbContext.Sliders.FirstOrDefault(c => c.Id == id);
+       //         if (id == null) return NotFound();
 
+       // string path = Path.Combine(_webHostEnvironment.WebRootPath, "images", slider.ImageUrl);
+       // HelperServices.DeleteFile(path);
+
+
+       //         _appDbContext.Sliders.Remove(slider);
+       //         _appDbContext.SaveChanges();
+       //         return RedirectToAction(nameof(Index));
 
     }
 }

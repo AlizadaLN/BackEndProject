@@ -27,7 +27,7 @@ namespace BackEndProject.Areas.AdminArea.Controllers
 
         public IActionResult Index()
         {
-            ViewBag.webHostEnvironment = _webHostEnvironment.ContentRootPath + @"wwwroot\assets\imgProd\";
+            ViewBag.webHostEnvironment = _webHostEnvironment.ContentRootPath + @"wwwroot\assets\images\";
             var products = _appDbContext.Products
                 .Include(p => p.Images)
                 .Include(p => p.Category).Where(x=>!x.IsDeleted)
@@ -56,13 +56,15 @@ namespace BackEndProject.Areas.AdminArea.Controllers
 
             foreach (var item in productCreateVM.Photos)
             {
-                if (!item.CheckFileType())
+                if (item.CheckFileType("jpg"))
                 {
                     ModelState.AddModelError("Photos", "Incorrect photo");
                     return View();
                 }
 
-                if (!item.CheckFileSize(1000))
+
+
+                if (item.CheckFileSize(3000))
                 {
                     ModelState.AddModelError("Photos", "Large Size");
                     return View();
@@ -77,7 +79,7 @@ namespace BackEndProject.Areas.AdminArea.Controllers
 
                 foreach (var photo in productCreateVM.Photos)
                 {
-                    image.ImageUrl = photo.SaveImage(_webHostEnvironment, "imgProd");
+                    image.ImageUrl = photo.SaveImage(_webHostEnvironment, "images");
                     image.ProductId = productCreateVM.Id;
                     product.Images.Add(image);
                 }
@@ -147,7 +149,7 @@ namespace BackEndProject.Areas.AdminArea.Controllers
                 ViewBag.Categories = new SelectList(_appDbContext.Categories.ToList(), "Id", "Name");
                 return View(productCreateVM);
             }
-            string path = _webHostEnvironment.ContentRootPath + "wwwroot\\assets\\imgProd\\";
+            string path = _webHostEnvironment.ContentRootPath + "wwwroot\\assets\\images\\";
             if(productCreateVM.Photos is not null)
             {
                 foreach (var Image in Product.Images)
@@ -159,7 +161,7 @@ namespace BackEndProject.Areas.AdminArea.Controllers
                 Image image=new();
                 foreach (var photo in productCreateVM.Photos)
                 {
-                    image.ImageUrl = photo.SaveImage(_webHostEnvironment, "imgProd");
+                    image.ImageUrl = photo.SaveImage(_webHostEnvironment, "images");
                     image.ProductId = productCreateVM.Id;
                     Product.Images.Add(image);
                 }
@@ -194,7 +196,7 @@ namespace BackEndProject.Areas.AdminArea.Controllers
         }
 
 
-        
+        [HttpPost]
         public IActionResult Delete(int? id)
         {
             if (id == null) return NotFound();

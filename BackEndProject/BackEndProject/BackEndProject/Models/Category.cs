@@ -10,6 +10,7 @@ namespace BackEndProject.Models
         public string Name { get; set; }
         public bool IsMain { get; set; }
 
+
         public Nullable<int> ParentId { get; set; }
         public Category Parent { get; set; }
 
@@ -19,5 +20,7 @@ namespace BackEndProject.Models
         public string ImageUrl { get; set; }
 
         public int CountOfSoldProd { get; set; }
+
+       
     }
 }

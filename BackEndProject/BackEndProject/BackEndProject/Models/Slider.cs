@@ -1,4 +1,5 @@
-﻿namespace BackEndProject.Models
+﻿using Microsoft.EntityFrameworkCore;
+namespace BackEndProject.Models
 {
     public class Slider
     {
@@ -9,6 +10,7 @@
         public string? Title { get; set; }
         public string? Description { get; set; }
 
-        
+        //public List<Image> Images { get; set; } = new List<Image>();
+
     }
 }
