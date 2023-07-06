@@ -71,7 +71,7 @@ namespace BackEndProject.Areas.AdminArea.Controllers
                 return View(categoryCreateVM);
             }
 
-            if (categoryCreateVM.Photo.CheckFileType("jpg")|| categoryCreateVM.Photo.CheckFileType("png"))
+            if (categoryCreateVM.Photo.CheckFileType("jpg")||categoryCreateVM.Photo.CheckFileType("png"))
             {
                 ModelState.AddModelError("Photo", "Invalid file type. Please select an image file.");
                 return View(categoryCreateVM);
@@ -90,16 +90,7 @@ namespace BackEndProject.Areas.AdminArea.Controllers
 
             };
 
-            if (!newCategory.IsMain)
-            {
-                if (categoryCreateVM.ParentId == null)
-                {
-                    ModelState.AddModelError("ParentId", "Please select a parent category");
-                    return View(categoryCreateVM);
-                }
-
-                newCategory.ParentId = categoryCreateVM.ParentId;
-            }
+           
 
             string uniqueFileName = categoryCreateVM.Photo.SaveImage(_webHostEnvironment, "images");
 
@@ -108,7 +99,7 @@ namespace BackEndProject.Areas.AdminArea.Controllers
             Image image = new Image
             {
                 ImageUrl = categoryCreateVM.Photo.SaveImage(_webHostEnvironment, "images"),
-                SliderId = newCategory.Id
+                CategoryId = newCategory.Id
             };
 
 
@@ -206,38 +197,12 @@ namespace BackEndProject.Areas.AdminArea.Controllers
             string path = Path.Combine(_webHostEnvironment.WebRootPath, "images", category.ImageUrl);
             HelperServices.DeleteFile(path);
 
-
-            //var hasProducts = _appDbContext.Products.Any(p => p.CategoryId == category.Id);
-            //if (hasProducts)
-            //{
-            //    ModelState.AddModelError("CategoryId", "Cannot delete the category because it contains products.");
-            //    return RedirectToAction(nameof(Index));
-            //}
-
-
-            //if (category.Children.Any())
-            //{
-            //    ModelState.AddModelError("CategoryId", "Cannot delete the category because it has children categories.");
-            //    return RedirectToAction(nameof(Index));
-            //}
-
             _appDbContext.Categories.Remove(category);
             _appDbContext.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
 
-       //if (id == null) return NotFound();
-       // var slider = _appDbContext.Sliders.FirstOrDefault(c => c.Id == id);
-       //         if (id == null) return NotFound();
-
-       // string path = Path.Combine(_webHostEnvironment.WebRootPath, "images", slider.ImageUrl);
-       // HelperServices.DeleteFile(path);
-
-
-       //         _appDbContext.Sliders.Remove(slider);
-       //         _appDbContext.SaveChanges();
-       //         return RedirectToAction(nameof(Index));
-
+       
     }
 }
 

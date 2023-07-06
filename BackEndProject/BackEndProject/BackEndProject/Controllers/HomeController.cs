@@ -23,9 +23,11 @@ namespace BackEndProject.Controllers
             homeVM.Sliders = _appDbContext.Sliders.ToList();
          //   homeVM.SlidersContent = _appDbContext.SlidersContent.FirstOrDefault();
             homeVM.Banners = _appDbContext.Banners.ToList();
+
             homeVM.Brands = _appDbContext.Brands.ToList();
             homeVM.FeaturesBannerAreas = _appDbContext.FeaturesBannerAreas.ToList();
             homeVM.Blogs = _appDbContext.Blogs.ToList();
+            homeVM.Products = _appDbContext.Products.Include(p => p.Images).Take(4).ToList();
 
 
             return View(homeVM);
