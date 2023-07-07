@@ -1,0 +1,13 @@
+﻿@model Slider
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Areas/AdminArea/Views/Shared/_AdminLayout.cshtml";
+}
+ <h2>@Model.Title </h2>
+ <h2>@Model.SubTitle</h2>
+ <img src="~/assets/images/@Model.ImageUrl"/>
+ <form method="post">
+
+ <button class="btn btn-danger" type="submit">Delete</button>
+ </form>
+ <a class="btn btn-success" asp-action="Index">Cancel</a>

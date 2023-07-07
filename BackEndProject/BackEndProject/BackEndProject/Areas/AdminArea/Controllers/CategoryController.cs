@@ -94,13 +94,8 @@ namespace BackEndProject.Areas.AdminArea.Controllers
 
             string uniqueFileName = categoryCreateVM.Photo.SaveImage(_webHostEnvironment, "images");
 
-            newCategory.ImageUrl = uniqueFileName;
+            newCategory.ImageUrl = categoryCreateVM.Photo.FileName;
 
-            Image image = new Image
-            {
-                ImageUrl = categoryCreateVM.Photo.SaveImage(_webHostEnvironment, "images"),
-                CategoryId = newCategory.Id
-            };
 
 
             _appDbContext.Categories.Add(newCategory);
@@ -117,9 +112,7 @@ namespace BackEndProject.Areas.AdminArea.Controllers
             var Category = _appDbContext.Categories.FirstOrDefault(x => x.Id == id);
             if (Category == null)
                 return NotFound();
-                ViewBag.Categories = _appDbContext.Categories.ToList();
-                ViewBag.ParentCategories = _appDbContext.Categories.Where(c => c.IsMain && c.Id != id);
-
+            
             CategoryUpdateVM categoryUpdateVM = new()
             {
                 Name = Category.Name,
@@ -138,8 +131,6 @@ namespace BackEndProject.Areas.AdminArea.Controllers
             if (oldCategory is null)
                 return NotFound();
 
-            ViewBag.Categories = _appDbContext.Categories.ToList();
-            ViewBag.ParentCategories = _appDbContext.Categories.Where(c => c.IsMain && c.Id != id);
 
 
             //if (oldCategory.IsMain == false && model.IsMain==true)
@@ -160,8 +151,7 @@ namespace BackEndProject.Areas.AdminArea.Controllers
 
             if (!ModelState.IsValid)
             {
-                ViewBag.Categories = _appDbContext.Categories.ToList();
-                ViewBag.ParentCategories = _appDbContext.Categories.Where(c => c.IsMain && c.Id != id);
+                
                 return View(model);
             }
 
@@ -175,8 +165,16 @@ namespace BackEndProject.Areas.AdminArea.Controllers
             }
 
             category.Name = model.Name;
-            category.IsMain = model.IsMain;
-            category.ParentId = model.ParentId;
+
+
+            if(model.Image is not null)
+            {
+
+                string path = Path.Combine(_webHostEnvironment.WebRootPath, "images", category.ImageUrl);
+                category.ImageUrl.DeleteImage(path);
+                model.Image.SaveImage(_webHostEnvironment, "images");
+                category.ImageUrl = model.Image.FileName;
+            }
 
             _appDbContext.SaveChanges();
 
@@ -186,12 +184,50 @@ namespace BackEndProject.Areas.AdminArea.Controllers
 
         public IActionResult Delete(int id)
         {
-
             if (id == null) return NotFound();
             var category = _appDbContext.Categories.FirstOrDefault(c => c.Id == id);
-            if (id == null)
+            if (category == null)
             {
                 return NotFound();
+            }
+            return View(category);
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ActionName("Delete")]
+        public IActionResult DeleteCategory(int id)
+        {
+
+            if (id == null) return NotFound();
+            var category = _appDbContext.Categories.Include(x=>x.Products).Include(y=>y.Children).FirstOrDefault(c => c.Id == id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+
+            if (category.IsMain)
+            {
+                if(category.Children.Count()>0)
+                {
+                    ModelState.AddModelError("Category", "Category have a child category or products");
+                    return View(category);
+                }
+                var check = _appDbContext.Products.Where(p => p.Category.Name.ToLower() == category.Name.ToLower());
+                if (check!=null)
+                {
+                    ModelState.AddModelError("Category", "Category have products");
+                    return View(category);
+                }
+            }
+            if (!category.IsMain)
+            {
+                if (category.Products.Count()>0)
+                {
+                    ModelState.AddModelError("", "Category have a child category or products");
+                    return View(category);
+                }
             }
 
             string path = Path.Combine(_webHostEnvironment.WebRootPath, "images", category.ImageUrl);
@@ -199,7 +235,7 @@ namespace BackEndProject.Areas.AdminArea.Controllers
 
             _appDbContext.Categories.Remove(category);
             _appDbContext.SaveChanges();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Delete));
         }
 
        

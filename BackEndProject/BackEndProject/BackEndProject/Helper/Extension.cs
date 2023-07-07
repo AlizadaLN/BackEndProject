@@ -42,5 +42,14 @@ namespace BackEndProject.Helper
             }
 
         }
+
+        public static void DeleteImage(this string image, string path)
+        {
+            if (System.IO.File.Exists(path))
+            {
+                System.IO.File.Delete(path);
+            }
+
+        }
     }
 }

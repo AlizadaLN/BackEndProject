@@ -12,7 +12,7 @@ namespace BackEndProject.ViewModels.AdminVM.Category
 
         public Nullable<int> ParentId { get; set; }
 
-        [Required]
+       
         public IFormFile Photo { get; set; }
     }
 }

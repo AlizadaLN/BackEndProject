@@ -7,9 +7,6 @@
         public bool IsMain { get; set; }
         public int? ProductId { get; set; }
         public Product Product { get; set; }
-        public int? SliderId { get; set; }
-        public Slider slider { get; set; }
-        public int? CategoryId { get; set; }
-        public Category category { get; set; }
+
     }
 }

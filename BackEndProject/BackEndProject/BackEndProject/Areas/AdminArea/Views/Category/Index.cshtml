@@ -39,18 +39,12 @@
                                         <a class="btn btn-primary" asp-controller="Category" asp-action="update" asp-route-id="@item.Id">
                                             <i class="mdi mdi-tooltip-edit"></i>
                                             </a>
-                                       @* <a class="btn btn-danger" asp-controller="Category" asp-action="delete" asp-route-id="@item.Id">
+                                        <a class="btn btn-danger" asp-controller="Category" asp-action="Delete" asp-route-id="@item.Id">
                                             <i class="mdi mdi-delete"></i>
-                                         </a>*@
+                                         </a>
 
-                                      <a>   <form asp-action="delete" asp-route-id="@item.Id">
-                                            <input type="hidden" asp-for="@item.Id" value="@item.Id"/>
-                                            <button class="btn btn-danger" type="submit">
-                                                <i class="mdi mdi-delete"></i>
-                                            </button>
-                                        </form>
 
-                                        </a>
+                                        
                                     </td>
 
                                 </tr>

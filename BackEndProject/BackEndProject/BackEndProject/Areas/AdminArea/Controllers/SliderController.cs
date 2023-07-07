@@ -6,6 +6,7 @@ using BackEndProject.Helper;
 using BackEndProject.ViewModels.AdminVM.Category;
 using BackEndProject.ViewModels.AdminVM.Product;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Hosting;
 
 
 namespace BackEndProject.Areas.AdminArea.Controllers
@@ -85,11 +86,6 @@ namespace BackEndProject.Areas.AdminArea.Controllers
             string uniqueFileName = sliderCreateVM.Photo.SaveImage(_webHostEnvironment, "images");
             newSlider.ImageUrl = uniqueFileName;
 
-            Image image = new Image
-            {
-                ImageUrl = sliderCreateVM.Photo.SaveImage(_webHostEnvironment, "images"),
-                SliderId = newSlider.Id
-            };
 
 
             _appDbContext.Sliders.Add(newSlider);
@@ -102,78 +98,98 @@ namespace BackEndProject.Areas.AdminArea.Controllers
 
         public IActionResult Update(int id)
         {
-            //var Slider = _appDbContext.Sliders.FirstOrDefault(x => x.Id == id);
-            //if (Slider == null)
-            //    return NotFound();
-         
-            //SliderCreateVM sliderCreateVM = new()
-            //{
-            //    Title = Slider.Title,
-            //    SubTitle = Slider.SubTitle,
-            //    Description = Slider.Description,
-            //};
-            return View();
+            var Slider = _appDbContext.Sliders.FirstOrDefault(x => x.Id == id);
+            if (Slider == null)
+                return NotFound();
+
+            SliderCreateVM sliderCreateVM = new()
+            {
+                Title = Slider.Title,
+                SubTitle = Slider.SubTitle,
+                Description = Slider.Description
+            };
+            return View(sliderCreateVM);
 
         }
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        //public IActionResult Update(int id, SliderCreateVM model)
-        //{
-        //    var oldSlider = _appDbContext.Sliders.FirstOrDefault(x => x.Id == id);
-        //    if (oldSlider is null)
-        //        return NotFound();
+        public IActionResult Update(int id, SliderCreateVM model)
+        {
+            var oldSlider = _appDbContext.Sliders.FirstOrDefault(x => x.Id == id);
+            if (oldSlider is null)
+                return NotFound();
 
 
 
 
-        //    var sliders = _appDbContext.Sliders.Include(c => c.Children).FirstOrDefault(c => c.Id == id);
-        //    if (sliders == null)
-        //    {
-        //        return NotFound();
-        //    }
+            if (!ModelState.IsValid)
+            {
 
-        //    if (!ModelState.IsValid)
-        //    {
+                return View(model);
+            }
 
-        //        return View(model);
-        //    }
+            var exist = _appDbContext.Sliders.Any(c => c.Title.ToLower() == model.Title.ToLower() && c.Id != id);
+            if (exist)
+            {
+                ModelState.AddModelError("Name", "A slider with the same name already exists");
+                ViewBag.Sliders = _appDbContext.Sliders.ToList();
+                ViewBag.ParentCategories = _appDbContext.Categories.Where(c => c.IsMain && c.Id != id);
+                return View(model);
+            }
 
-        //    var exist = _appDbContext.Sliders.Any(c => c.Title.ToLower() == model.Title.ToLower() && c.Id != id);
-        //    if (exist)
-        //    {
-        //        ModelState.AddModelError("Name", "A slider with the same name already exists");
-        //        ViewBag.Sliders = _appDbContext.Sliders.ToList();
-        //        ViewBag.ParentCategories = _appDbContext.Categories.Where(c => c.IsMain && c.Id != id);
-        //        return View(model);
-        //    }
+            oldSlider.Title = model.Title;
+            oldSlider.SubTitle = model.SubTitle;
+            oldSlider.Description = model.Description;
 
-        //    sliders.Title = model.Title;
-        //    sliders.SubTitle = model.SubTitle;
-        //    sliders.Description = model.Description;
+            if (model.Photo is not null)
+            {
+                string path = Path.Combine(_webHostEnvironment.WebRootPath, "assets", "images");
+                oldSlider.ImageUrl.DeleteImage(Path.Combine(path, oldSlider.ImageUrl));
+                model.Photo.SaveImage(_webHostEnvironment, "images");
+                oldSlider.ImageUrl = model.Photo.FileName;
+            }
+          
 
-        //    _appDbContext.SaveChanges();
+            _appDbContext.SaveChanges();
 
-        //    return RedirectToAction(nameof(Index));
-        //}
+            return RedirectToAction(nameof(Index));
+        }
 
+
+
+ 
+        public IActionResult Delete(int id)
+        {
+            if (id == null) return NotFound();
+            var slider = _appDbContext.Sliders.FirstOrDefault(c => c.Id == id);
+            if (slider == null) return NotFound();
+
+
+            return View(slider);
+        }
 
 
         [HttpPost]
-        public IActionResult Delete(int? id)
-            {
-                if (id == null) return NotFound();
-                var slider = _appDbContext.Sliders.FirstOrDefault(c => c.Id == id);
-                if (id == null) return NotFound();
+        [ValidateAntiForgeryToken]
+        [ActionName("Delete")]
+        public IActionResult DeleteSlider(int id)
+        {
+            if (id == null) return NotFound();
+            var slider = _appDbContext.Sliders.FirstOrDefault(c => c.Id == id);
+            if (slider == null) return NotFound();
 
-                string path = Path.Combine(_webHostEnvironment.WebRootPath, "images", slider.ImageUrl);
-                HelperServices.DeleteFile(path);
+
+            string path = Path.Combine(_webHostEnvironment.WebRootPath, "images", slider.ImageUrl);
+            HelperServices.DeleteFile(path);
 
 
-                _appDbContext.Sliders.Remove(slider);
-                _appDbContext.SaveChanges();
-                return RedirectToAction(nameof(Index));
-            }
+            _appDbContext.Sliders.Remove(slider);
+            _appDbContext.SaveChanges();
+
+
+            return RedirectToAction(nameof(Index));
+        }
         }
     
 }

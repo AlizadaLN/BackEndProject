@@ -14,6 +14,7 @@ namespace BackEndProject.ViewModels.AdminVM.Category
             public bool IsMain { get; set; }
 
             public int? ParentId { get; set; }
+            public IFormFile? Image { get; set; }
         
 
     }
