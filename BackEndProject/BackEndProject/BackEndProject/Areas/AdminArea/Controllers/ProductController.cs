@@ -28,13 +28,21 @@ namespace BackEndProject.Areas.AdminArea.Controllers
         public IActionResult Index()
         {
             ViewBag.webHostEnvironment = _webHostEnvironment.ContentRootPath + @"wwwroot\assets\images\";
-            var products = _appDbContext.Products
+            var product = _appDbContext.Products
                 .Include(p => p.Images)
                 .Include(p => p.Category).Where(x=>!x.IsDeleted)
                 .ToList();
-            return View(products);
+            return View(product);
         }
 
+        public IActionResult Detail(int? id)
+        {
+            if (id == null) return NotFound();
+            var product = _appDbContext.Products.FirstOrDefault(c => c.Id == id);
+            if (id == null) return NotFound();
+
+            return View(product);
+        }
 
         public IActionResult Create()
         {

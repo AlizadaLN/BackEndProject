@@ -217,7 +217,7 @@ namespace BackEndProject.Areas.AdminArea.Controllers
                 var check = _appDbContext.Products.Where(p => p.Category.Name.ToLower() == category.Name.ToLower());
                 if (check!=null)
                 {
-                    ModelState.AddModelError("Category", "Category have products");
+                    ModelState.AddModelError("", "Category have products");
                     return View(category);
                 }
             }

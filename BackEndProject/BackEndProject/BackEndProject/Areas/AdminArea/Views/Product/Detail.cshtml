@@ -1,0 +1,60 @@
+﻿@model Product
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Areas/AdminArea/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+  
+
+
+
+<div class="row product-active">
+    <div class="col-md-6 grid-margin stretch-card">
+
+       
+            <div class="single-product mt-30">
+
+            
+             <div class="img">
+            <a href="single-product.html">
+
+                  <img class="first-image" src="~/assets/images/product/@Model.Images)" alt="product">
+
+                </a>
+            </div>
+           
+        </div>
+        
+    </div>
+
+    <div class="col-md-6 grid-margin stretch-card" style="display: flex; flex-direction: column;">
+        <div>
+            <h4 class="product-title"><a href="single-product.html">Name: @Model.Name</a></h4>
+
+        </div>
+        
+       
+
+    <div class="product-content">
+
+        <div class="product-price">
+            <span class="price-sale">Price: €@Model.Price</span> <br />
+            <span class="price-sale">Discount: €@Model.Discount</span>
+        </div>
+        <span class="price-sale">Category Id: @Model.CategoryId</span>
+    </div>
+    <div>
+    <ul class="product-rating">
+        <span class="price-sale">Rating: @Model.Rating</span>
+        <br />
+        @for (int i = 0; i <= Model.Rating; i++)
+        {
+            <li><i class="fas fa-star"></i></li>
+        }
+    </ul>
+        </div>
+</div>
+</div>
+
+<a class="btn btn-success" asp-controller="product" asp-action="index">Back</a>

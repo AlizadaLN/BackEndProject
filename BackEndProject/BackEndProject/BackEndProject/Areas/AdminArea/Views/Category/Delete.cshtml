@@ -6,10 +6,9 @@
 
 <h2>@Model.Name </h2>
 <img src="~/assets/images/@Model.ImageUrl" />
-@*<div asp-validation-summary="ModelOnly"></div>*@
+<div asp-validation-summary="All" style="color:red;"></div>
 <form method="post">
 
     <button class="btn btn-danger" type="submit">Delete</button>
-    <span asp-validation-for="Children"></span>
 </form>
 <a class="btn btn-success" asp-action="Index">Cancel</a>

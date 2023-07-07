@@ -18,13 +18,9 @@
 
                                 <th>Name</th>
                                 <th>Price</th>
-                                <th>Discount</th>
-                                <th>Count</th>
-                                <th>Rating</th>
-                                <th>CreatedDate</th>
-                                <th>IsSpecialProduct</th>
+                                
                                 <th>Image</th>
-                                <th>CategoryId</th>
+                                
                                 <th>Settings</th>
 
                             </tr>
@@ -35,15 +31,11 @@
                                 <tr>
                                     <td>@products.Name</td>
                                     <td>@products.Price</td>
-                                    <td>@products.Discount</td>
-                                    <td>@products.Count</td>
-                                    <td>@products.Rating</td>
-                                    <td>@products.CreatedDate</td>
-                                    <td>@products.IsSpecialProduct</td>
+                                   
                                     <td>
                                         <img src="~/assets/images/@products.Images[0].ImageUrl" alt="">
                                         </td>
-                                    <td>@products.CategoryId</td>
+                                   
                                     <td>
 
                                         <a class="btn btn-primary" asp-controller="Product" asp-action="update" asp-route-id="@products.Id">
@@ -51,6 +43,9 @@
                                         </a>
                                         <a class="btn btn-danger" asp-controller="Product" asp-action="delete" asp-route-id="@products.Id">
                                             <i class="mdi mdi-delete"></i>
+                                        </a>
+                                        <a class="btn btn-success" asp-controller="Product" asp-action="Detail" asp-route-id="@products.Id">
+                                            <i class="mdi mdi-account-card-details"></i>
                                         </a>
 
 
