@@ -28,6 +28,7 @@ namespace BackEndProject.Controllers
             homeVM.FeaturesBannerAreas = _appDbContext.FeaturesBannerAreas.ToList();
             homeVM.Blogs = _appDbContext.Blogs.ToList();
             homeVM.Products = _appDbContext.Products.Include(p => p.Images).Take(4).ToList();
+            homeVM.Categories=_appDbContext.Categories.ToList();
 
 
             return View(homeVM);
