@@ -469,6 +469,24 @@
                                     </ul>
                                 </li>
                                 <li><a href="contact.html">Contact</a></li>
+                               @* <li class="position-static">
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <a class="" asp-area="adminarea" asp-controller="dashboard">AdminPanel</a>
+                                    }
+                                </li>*@
+
+                                <li class="position-static">
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        <a class="" href="">@ViewBag.UserFullName</a>
+                                    <li><a class="" asp-controller="account" asp-action="Logout">Logout</a></li>
+                                    }
+                                    else
+                                    {
+                                    <a class="" asp-controller="account" asp-action="Login">Login</a>
+                                    }
+                                </li>
                             </ul>
                         </div> <!-- header horizontal menu -->
                     </div>

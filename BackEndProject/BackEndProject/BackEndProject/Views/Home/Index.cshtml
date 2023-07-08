@@ -57,10 +57,10 @@
         <div class="row category-active">
 
 
-            @for (int i = 0; i < (int)Math.Round((decimal)Model.Categories.Count() / 2); i++)
+            @for (int a = 0; a < (int)Math.Round((decimal)Model.Categories.Count() / 2); a++)
             {
                 <div class="col-lg-2">
-                    @foreach (var item in Model.Categories.Skip(i * 2).Take(2))
+                    @foreach (var item in Model.Categories.Skip(a * 2).Take(2))
                     {
                         @if (item.CountOfSoldProd > 50)
                         {
@@ -83,6 +83,204 @@
 
 <!--====== Category Part Ends ======-->
 <!--====== Product Part Start ======-->
+
+
+<section class="product-area pt-100 pb-100">
+    <div class="container-fluid custom-container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="product-menu pb-30">
+                    <ul class="nav justify-content-center" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a class="active" id="new-tab" data-toggle="tab" href="#new" role="tab" aria-controls="new" aria-selected="true">New Arrival</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a id="bestseller-tab" data-toggle="tab" href="#bestseller" role="tab" aria-controls="bestseller" aria-selected="false">Bestseller</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a id="featured-tab" data-toggle="tab" href="#featured" role="tab" aria-controls="featured" aria-selected="false">Featured</a>
+                        </li>
+                    </ul>
+                </div> <!-- product menu -->
+            </div>
+        </div> <!-- row -->
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="new" role="tabpanel" aria-labelledby="new-tab">
+            <div class="product-items">
+                    <div class="row product-active">
+                      
+                        
+                        
+             @for (int d = 0; d < (int)Math.Round((decimal)Model.Products.Count() / 2); d++)
+                    {
+                        <div class="col-lg-12">
+                            @foreach (var item in Model.Products.Skip(d * 2).Take(2))
+                            {
+
+                                
+                                    <div class="product-image">
+                                        <a href="single-product.html">
+                                            @if (item.Images.Count > 0)   @*products.CreatedDate >= DateTime.Now.AddDays(-30)*@
+                                            {
+                                                <img class="first-image" src="~/assets/images/product/@(item.Images.FirstOrDefault(i=>i.IsMain)!=null?item.Images.FirstOrDefault(i=>i.IsMain).ImageUrl:item.Images.FirstOrDefault().ImageUrl)" alt="product">
+
+                                            }
+                                            else
+                                            {
+                                                <img class="first-image" src="~/assets/images/product/product-1.jpg" alt="product">
+
+                                            }
+                                        </a>
+                                        <ul class="product-meta">
+                                            <li><a href="#"><i class="icon ion-bag"></i></a></li>
+                                            <li><a href="#"><i class="icon ion-android-favorite-outline"></i></a></li>
+                                            <li><a href="#"><i class="icon ion-android-options"></i></a></li>
+                                            <li><a data-toggle="modal" data-target="#productQuickModal" href="#"><i class="icon ion-android-open"></i></a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="product-content">
+                                        <ul class="product-rating">
+                                            @for (int i = 0; i <= item.Rating; i++)
+                                            {
+                                                <li><i class="fas fa-star"></i></li>
+                                            }
+
+                                        </ul>
+                                        <h4 class="product-title"><a href="single-product.html">@item.Name</a></h4>
+                                        <div class="product-price">
+                                            <span class="price-sale">€@item.Price</span>
+                                        </div>
+                                    </div>
+                               
+                            }
+                        </div>
+                    }
+
+                       
+
+                    </div> <!-- row -->
+                </div> <!-- product items -->
+        </div>
+
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="new" role="tabpanel" aria-labelledby="new-tab">
+                <div class="product-items">
+                    <div class="row product-active">
+                        @for (int b = 0; b < (int)Math.Round((decimal)Model.Products.Count() / 2); b++)
+                        {
+                            <div class="col-lg-2">
+                                @foreach (var item in Model.Products.Skip(b * 2).Take(2))
+                                {
+                                    @if (item.CreatedDate >= DateTime.Now.AddDays(-30))
+                                    {
+                                        <div class="single-product mt-30">
+                                            <div class="product-image">
+                                                <a href="single-product.html">
+                                                    @if (item.Images.Count > 0)
+                                                    {
+                                                        <img class="first-image" src="~/assets/images/product/@(item.Images.FirstOrDefault(i=>i.IsMain)!=null?item.Images.FirstOrDefault(i=>i.IsMain).ImageUrl:item.Images.FirstOrDefault().ImageUrl)" alt="product">
+                                                    }
+                                                    else
+                                                    {
+                                                        <img class="first-image" src="~/assets/images/product/product-1.jpg" alt="product">
+                                                    }
+                                                </a>
+                                                <ul class="product-meta">
+                                                    <li><a href="#"><i class="icon ion-bag"></i></a></li>
+                                                    <li><a href="#"><i class="icon ion-android-favorite-outline"></i></a></li>
+                                                    <li><a href="#"><i class="icon ion-android-options"></i></a></li>
+                                                    <li><a data-toggle="modal" data-target="#productQuickModal" href="#"><i class="icon ion-android-open"></i></a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="product-content">
+                                                <ul class="product-rating">
+                                                    @for (int i = 0; i <= item.Rating; i++)
+                                                    {
+                                                        <li><i class="fas fa-star"></i></li>
+                                                    }
+                                                </ul>
+                                                <h4 class="product-title"><a href="single-product.html">@item.Name</a></h4>
+                                                <div class="product-price">
+                                                    <span class="price-sale">€@item.Price</span>
+                                                </div>
+                                            </div>
+                                        </div> <!-- single product -->
+                                    }
+                                }
+                            </div>
+                        }
+                    </div> <!-- row -->
+                </div> <!-- product items -->
+            </div>
+        </div>
+
+
+        <div class="tab-pane fade" id="bestseller" role="tabpanel" aria-labelledby="bestseller-tab">
+                <div class="product-items">
+                   
+                    <div class="row product-active">
+                    @for (int d = 0; d < (int)Math.Round((decimal)Model.Products.Count() / 2); d++)
+                    {
+                        <div class="col-lg-12">
+                            @foreach (var item in Model.Products.Skip(d * 2).Take(2))
+                            {
+
+                                <div class="single-product mt-30">
+                                    <div class="product-image">
+                                        <a href="single-product.html">
+                                            @if (item.Images.Count > 0)   @*products.CreatedDate >= DateTime.Now.AddDays(-30)*@
+                                            {
+                                                <img class="first-image" src="~/assets/images/product/@(item.Images.FirstOrDefault(i=>i.IsMain)!=null?item.Images.FirstOrDefault(i=>i.IsMain).ImageUrl:item.Images.FirstOrDefault().ImageUrl)" alt="product">
+
+                                            }
+                                            else
+                                            {
+                                                <img class="first-image" src="~/assets/images/product/product-1.jpg" alt="product">
+
+                                            }
+                                        </a>
+                                        <ul class="product-meta">
+                                            <li><a href="#"><i class="icon ion-bag"></i></a></li>
+                                            <li><a href="#"><i class="icon ion-android-favorite-outline"></i></a></li>
+                                            <li><a href="#"><i class="icon ion-android-options"></i></a></li>
+                                            <li><a data-toggle="modal" data-target="#productQuickModal" href="#"><i class="icon ion-android-open"></i></a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="product-content">
+                                        <ul class="product-rating">
+                                            @for (int i = 0; i <= item.Rating; i++)
+                                            {
+                                                <li><i class="fas fa-star"></i></li>
+                                            }
+
+                                        </ul>
+                                        <h4 class="product-title"><a href="single-product.html">@item.Name</a></h4>
+                                        <div class="product-price">
+                                            <span class="price-sale">€@item.Price</span>
+                                        </div>
+                                    </div>
+                                </div> <!-- single product -->
+                            }
+                        </div>
+                    }
+
+                     </div> <!-- product items -->
+            </div>
+            <div class="tab-pane fade" id="featured" role="tabpanel" aria-labelledby="featured-tab">
+                <div class="product-items">
+                    <div class="row product-active">
+
+                       
+
+
+
+                    </div> <!-- row -->
+                </div> <!-- product items -->
+            </div>
+        </div> <!-- tab content -->
+    </div> <!-- container -->
+</section>
+
 <!--====== Product Part Ends ======-->
 <!--====== Special Products Part Start ======-->
 

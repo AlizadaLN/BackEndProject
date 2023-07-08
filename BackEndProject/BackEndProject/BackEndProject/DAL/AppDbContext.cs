@@ -1,10 +1,11 @@
 ﻿using BackEndProject.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography.X509Certificates;
 
 namespace BackEndProject.DAL
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<AppUser>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -13,6 +14,8 @@ namespace BackEndProject.DAL
         public DbSet<Banner> Banners { get; set; }
 
         public DbSet<Brand> Brands { get; set; }
+
+        public DbSet<Bio> Bios { get; set; }
         public DbSet<FeaturesBannerArea> FeaturesBannerAreas { get; set; }
 
         public DbSet<Blog> Blogs { get; set; }

@@ -39,11 +39,18 @@
                     <input asp-for="Rating" class="form-control" placeholder="Rating">
                     <span asp-validation-for="Rating" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+                @*<div class="form-group">
                     <label for="CreatedDate"></label>
                     <input asp-for="CreatedDate" class="form-control" placeholder="CreatedDate">
                     <span asp-validation-for="CreatedDate" class="text-danger"></span>
+                </div>*@
+
+                <div class="form-group">
+                    <label for="CreatedDate">Created Date:</label>
+                    <input asp-for="CreatedDate" class="form-control" placeholder="@DateTime.Now.ToString("yyyy-MM-dd")" max="@(DateTime.Now.ToString("yyyy-MM-dd"))">
+                    <span asp-validation-for="CreatedDate" class="text-danger"></span>
                 </div>
+
 
                 <div class="form-group">
                     <label for="IsSpecialProduct"></label>
