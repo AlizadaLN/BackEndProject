@@ -1,0 +1,41 @@
+﻿@model RoleUpdateVM
+@{
+    ViewData["Title"] = "Update";
+    Layout = "~/Areas/AdminArea/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Update Role</h4>
+                <form method="post" class="forms-sample">
+                    <p>@Model.User.FullName</p>
+                    <input type="hidden" name="userId" value="@Model.User.Id" />
+                    @foreach (var role in Model.Roles)
+                    {
+                        if (Model.UserRoles.Contains(role.Name))
+                        {
+                            <div class="form-group">
+                                <label>@role.Name</label>
+                                <input name="newRoles" value="@role.Name" type="checkbox" checked class="form-control">
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-group">
+                                <label>@role.Name</label>
+                                <input name="newRoles" value="@role.Name" type="checkbox" class="form-control">
+                            </div>
+                        }
+
+                    }
+
+                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                    <a class="btn btn-light" asp-controller="user" asp-action="index">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
